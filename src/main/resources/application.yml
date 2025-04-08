@@ -1,0 +1,24 @@
+server:
+  port: 8081
+# JDBC ??
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gsm2
+    username: root
+    password: 12345
+
+  # JPA ??(Hibernate ?? : MySQL??(??)? SQL? ??)
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+    open-in-view: false # default
+
