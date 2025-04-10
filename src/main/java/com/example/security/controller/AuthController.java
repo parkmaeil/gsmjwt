@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@Tag(name="Auth Controller", description = "Controller for Account management")
+@Tag(name="인증컨트롤러", description = "Controller for Account management")
 @Slf4j
 public class AuthController {
 
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/users/add")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK) // { "email" : "aaa@aaa.aa.aa", "password" : "11111" }
     public ResponseEntity<?> adduser(@RequestBody AccountDTO accountDTO){
           try{
               Account account=new Account();

@@ -4,11 +4,12 @@ import com.example.security.entity.Account;
 import com.example.security.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
+//@Configuration
 @RequiredArgsConstructor
 public class SeedData implements CommandLineRunner {
 
@@ -23,13 +24,12 @@ public class SeedData implements CommandLineRunner {
              account01.setPassword("password");
              account01.setRole("ROLE_USER");
 
+             account02.setEmail("bit@empas.com");
+             account02.setPassword("password");
+             account02.setRole("ROLE_ADMIN");
 
-            account02.setEmail("bit@empas.com");
-            account02.setPassword("password");
-            account02.setRole("ROLE_ADMIN");
-
-            accountService.save(account01);
-            accountService.save(account02);
+             accountService.save(account01);
+             accountService.save(account02);
 
     }
 }
