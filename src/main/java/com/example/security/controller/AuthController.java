@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@Tag(name="인증컨트롤러", description = "Controller for Account management")
+@Tag(name="Auth Controller", description = "Controller for Account management")
 @Slf4j
 public class AuthController {
 
