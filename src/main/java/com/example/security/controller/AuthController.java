@@ -35,8 +35,11 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<TokenDTO> token(@RequestBody UserLoginDTO userLogin) throws AuthenticationException {
        try{
+           // 사용자 정보를 인증하는 부분 ->loadUserByUsername()
+           // Authentication : 사용자인증정보를 담고 있는객체(SecurityContextHolder) : User
            Authentication authentication=authenticationManager.authenticate(
                    new UsernamePasswordAuthenticationToken(userLogin.getEmail(),  userLogin.getPassword()));
+           // JWT 생성하는 부분
            return ResponseEntity.ok(new TokenDTO(tokenService.generateToken(authentication)));
        }catch (Exception e) {
            log.debug(AccountError.TOKEN_GENERATION_ERROR.toString()+":"+e.getMessage());

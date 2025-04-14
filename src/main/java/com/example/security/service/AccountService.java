@@ -46,9 +46,10 @@ public class AccountService implements UserDetailsService {
                  throw new UsernameNotFoundException("Account not found");
            }
            Account account=optionalAccount.get();
-
+           // 권한처리 : ROLE_USER(String), 1개 -> GrantedAuthority, 권한여러개,
            List<GrantedAuthority> grantedAuthority=new ArrayList<>();
            grantedAuthority.add(new SimpleGrantedAuthority(account.getRole()));
+           // 내부에서 패스워드 검증 시도.....
             return new User(account.getEmail(), account.getPassword(), grantedAuthority);
       }
 }

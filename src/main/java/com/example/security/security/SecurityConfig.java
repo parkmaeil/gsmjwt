@@ -1,5 +1,5 @@
 package com.example.security.security;
-import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.JWKSet; // 개인키, 공개키 : 쌍
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -25,8 +25,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
-
+public class SecurityConfig { // SecurityContextHolder
+    // 개인키, 공개키 생성
     @Bean
     public RSAKey rsaKey() {
         return RsaKeyUtil.generateRsaKeyForJwk();
@@ -40,12 +40,13 @@ public class SecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // 패스워드 암호화
     }
-
+    // AuthenticationManager : 인증관리자<--DB정보 + 인증서비스객체(UserDetailsService)
+    //                                             loadUserByUsername() 구현
     @Bean
     public AuthenticationManager authManager(UserDetailsService userDetailsService){
-        var authProvider = new DaoAuthenticationProvider();
+        var authProvider = new DaoAuthenticationProvider(); // DB정보
         authProvider.setPasswordEncoder(passwordEncoder());
         authProvider.setUserDetailsService(userDetailsService);
         return new ProviderManager(authProvider);
