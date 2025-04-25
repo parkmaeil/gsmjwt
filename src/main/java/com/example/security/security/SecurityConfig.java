@@ -22,6 +22,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -61,14 +66,32 @@ public class SecurityConfig {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     }
 
+    // 1) 시큐리티 필터에 CORS설정 객체 만들기
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource())
+                )
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/token").permitAll()
                         .requestMatchers("/auth/users/add").permitAll()
-                        .requestMatchers("/auth/users").hasAuthority("SCOPE_ROLE_USER")
+                        .requestMatchers("/auth/users").hasAuthority("SCOPE_ROLE_ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/**").permitAll()
                         .requestMatchers("/test").authenticated()
                 )

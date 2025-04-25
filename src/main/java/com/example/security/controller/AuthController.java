@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @Tag(name="Auth Controller", description = "Controller for Account management")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -33,7 +34,10 @@ public class AuthController {
 
     @PostMapping("/token")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TokenDTO> token(@RequestBody UserLoginDTO userLogin) throws AuthenticationException {
+    public ResponseEntity<TokenDTO> token(@RequestBody UserLoginDTO userLogin)
+                   throws AuthenticationException {
+        // 1.인증 JPA - email, password 성공 + 실패 -> 세션(HttpSession), JWT(검증)
+        // 2.SpringSecurity API -> SecurityFilterChain
        try{
            Authentication authentication=authenticationManager.authenticate(
                    new UsernamePasswordAuthenticationToken(userLogin.getEmail(),  userLogin.getPassword()));
@@ -59,9 +63,11 @@ public class AuthController {
               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
           }
     }
+
     @GetMapping("/users")
     @SecurityRequirement(name = "security-demo-api")
     public ResponseEntity<?> users(){
         return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
+
 }
